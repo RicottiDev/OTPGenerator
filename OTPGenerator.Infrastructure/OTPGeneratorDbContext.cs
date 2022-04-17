@@ -1,12 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
+using OTPGenerator.Infrastructure.Entities;
+using OTPGenerator.Infrastructure.EntityConfigurations;
 
 namespace OTPGenerator.Infrastructure
 {
-    internal class OTPGeneratorDbContext
+    public class OTPGeneratorDbContext : DbContext
     {
+        public OTPGeneratorDbContext(DbContextOptions<OTPGeneratorDbContext> options): base(options)
+        {
+        }
+
+        public DbSet<OTPCode> OTPCode { get; set; }
+        public DbSet<Tenant> Tenant { get; set; }
+
+        protected override void OnModelCreating (ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfiguration(new OTPCodeEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new TenantEntityConfiguration());   
+        }
     }
 }
